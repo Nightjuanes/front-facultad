@@ -1,53 +1,45 @@
-const API_URL = "http://127.0.0.1:5001";
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5001";
 
 async function request(endpoint, options = {}) {
-  console.log("Llamando API:", `${API_URL}${endpoint}`);
+  const res = await fetch(`${API_BASE}${endpoint}`, options);
 
-  const res = await fetch(`${API_URL}${endpoint}`, options);
-  const data = await res.json();
-
-  if (!res.ok || data.ok === false) {
-    throw new Error(data.error || `Error ${res.status}: ${res.statusText}`);
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(errorText || "Error en la petición al backend.");
   }
 
-  return data.data ?? data;
+  return await res.json();
 }
 
-export function getHealth() {
-  return request("/health");
-}
-
-export function getSemestres() {
-  return request("/semestres");
-}
-
-export function getProfesores() {
+export async function getProfesores() {
   return request("/profesores");
 }
 
-export function getOpciones(filters = {}) {
-  const params = new URLSearchParams();
-
-  Object.entries(filters).forEach(([key, value]) => {
-    if (value) params.append(key, value);
-  });
-
-  return request(`/opciones?${params.toString()}`);
+export async function getSemestres() {
+  return request("/semestres");
 }
 
-export function getConsolidado(filters = {}) {
+export async function getConsolidado({ profesor, semestres }) {
   const params = new URLSearchParams();
 
-  Object.entries(filters).forEach(([key, value]) => {
-    if (value) params.append(key, value);
-  });
+  if (profesor) params.append("profesor", profesor);
+  if (semestres) params.append("semestres", semestres);
 
   return request(`/consolidado?${params.toString()}`);
 }
 
-export function cargarExcel(file) {
+export async function getOpciones({ profesor, semestres }) {
+  const params = new URLSearchParams();
+
+  if (profesor) params.append("profesor", profesor);
+  if (semestres) params.append("semestres", semestres);
+
+  return request(`/opciones?${params.toString()}`);
+}
+
+export async function cargarExcel(archivo) {
   const formData = new FormData();
-  formData.append("archivo", file);
+  formData.append("archivo", archivo);
 
   return request("/cargar", {
     method: "POST",
