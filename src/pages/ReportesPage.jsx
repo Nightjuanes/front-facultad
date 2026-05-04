@@ -1,14 +1,32 @@
-import { Download, Database } from "lucide-react";
+import { Download, Database, Mail, Loader2, CheckCircle2 } from "lucide-react";
+import { useState } from "react";
 
 export default function ReportesPage({
   cardClass,
   darkMode,
   exportarExcel,
   exportarReporte,
+  enviarAlEquipo,
   reporteRef,
   resultados,
   profesor,
 }) {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleEnviar = async () => {
+    try {
+      setLoading(true);
+      await enviarAlEquipo(reporteRef, profesor);
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 5000);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className={`rounded-2xl border shadow-sm p-8 ${cardClass}`}>
       <div className="flex justify-between items-center mb-6">
@@ -42,6 +60,25 @@ export default function ReportesPage({
           >
             <Download size={18} />
             Generar PDF
+          </button>
+
+          <button
+            onClick={handleEnviar}
+            disabled={loading || success}
+            className={`px-5 py-3 rounded-xl flex items-center gap-2 transition-all-custom ${
+              success 
+                ? "bg-emerald-100 text-emerald-700" 
+                : "bg-blue-50 text-[#003B70] hover:bg-blue-100"
+            }`}
+          >
+            {loading ? (
+              <Loader2 size={18} className="animate-spin" />
+            ) : success ? (
+              <CheckCircle2 size={18} />
+            ) : (
+              <Mail size={18} />
+            )}
+            {loading ? "Enviando..." : success ? "Enviado con éxito" : "Enviar a Equipo"}
           </button>
         </div>
       </div>

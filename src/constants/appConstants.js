@@ -5,6 +5,7 @@ export const PAGE_KEYS = {
   REPORTES: "reportes",
   CARGA: "carga",
   CALIDAD: "calidad",
+  HISTORIAL: "historial",
 };
 
 export const INITIAL_OPTIONS = {

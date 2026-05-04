@@ -3,6 +3,7 @@ import {
   FileText,
   Upload,
   AlertTriangle,
+  History,
 } from "lucide-react";
 import MenuItem from "./MenuItem";
 import { LOGO_URL, PAGE_KEYS } from "../constants/appConstants";
@@ -58,6 +59,14 @@ export default function Sidebar({ activePage, setActivePage, darkMode }) {
         />
 
         <MenuItem
+          icon={History}
+          text="Historial de búsquedas"
+          active={activePage === PAGE_KEYS.HISTORIAL}
+          onClick={() => setActivePage(PAGE_KEYS.HISTORIAL)}
+          darkMode={darkMode}
+        />
+
+        <MenuItem
           icon={Upload}
           text="Actualizar base"
           active={activePage === PAGE_KEYS.CARGA}
@@ -74,5 +83,6 @@ export default function Sidebar({ activePage, setActivePage, darkMode }) {
         />
       </nav>
     </aside>
+
   );
 }

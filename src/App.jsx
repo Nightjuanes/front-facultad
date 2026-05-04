@@ -8,6 +8,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ReportesPage from "./pages/ReportesPage";
 import CargaPage from "./pages/CargaPage";
 import CalidadPage from "./pages/CalidadPage";
+import HistorialPage from "./pages/HistorialPage";
 import { AlertTriangle } from "lucide-react";
 
 import {
@@ -22,7 +23,7 @@ import { PAGE_KEYS, INITIAL_OPTIONS } from "./constants/appConstants";
 import { normalizeArray, getProfesorValue } from "./utils/normalizers";
 import { buildStats } from "./utils/stats";
 import { exportarExcel } from "./utils/exportarExcel";
-import { exportarPDF } from "./utils/exportarPDF";
+import { exportarPDF, enviarPDFAlEquipo } from "./utils/exportarPDF";
 
 import "./App.css";
 
@@ -51,6 +52,11 @@ export default function App() {
 
   const [archivo, setArchivo] = useState(null);
   const [mensajeCarga, setMensajeCarga] = useState("");
+
+  const [historial, setHistorial] = useState(() => {
+    const saved = localStorage.getItem("search_history");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const [loading, setLoading] = useState(false);
   const [loadingInicial, setLoadingInicial] = useState(true);
@@ -120,6 +126,10 @@ export default function App() {
 
     cargarInicial();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("search_history", JSON.stringify(historial));
+  }, [historial]);
 
   async function actualizarOpciones(nombreProfesor = profesor) {
     const nombre = nombreProfesor.trim();
@@ -192,7 +202,30 @@ export default function App() {
       return;
     }
 
-    setResultados(filtrarLocal(normalizeArray(data)));
+    const nuevosResultados = filtrarLocal(normalizeArray(data));
+    setResultados(nuevosResultados);
+
+    // Guardar en historial
+    const nuevaBusqueda = {
+      profesor,
+      semestresSeleccionados,
+      todoHistorial,
+      materia,
+      departamento,
+      componente,
+      timestamp: new Date().getTime(),
+    };
+
+    setHistorial((prev) => {
+      const filtered = prev.filter(
+        (h) =>
+          h.profesor !== profesor ||
+          JSON.stringify(h.semestresSeleccionados) !==
+            JSON.stringify(semestresSeleccionados)
+      );
+      return [...filtered, nuevaBusqueda].slice(-20);
+    });
+
     setActivePage(PAGE_KEYS.DASHBOARD);
   } catch (err) {
     setError("GENERAL");
@@ -205,6 +238,7 @@ export default function App() {
     setProfesor("");
     setMateria([]);
     setDepartamento([]);
+    setComponente([]);
     setSemestresSeleccionados([]);
     setTodoHistorial(true);
     setResultados([]);
@@ -242,6 +276,24 @@ export default function App() {
 
   function handleExportarPDF() {
     exportarPDF(reporteRef, profesor);
+  }
+
+  function cargarBusqueda(item) {
+    setProfesor(item.profesor);
+    setSemestresSeleccionados(item.semestresSeleccionados || []);
+    setTodoHistorial(item.todoHistorial);
+    setMateria(item.materia || []);
+    setDepartamento(item.departamento || []);
+    setComponente(item.componente || []);
+
+    setTimeout(() => {
+      actualizarOpciones(item.profesor);
+      buscar();
+    }, 100);
+  }
+
+  function limpiarHistorial() {
+    setHistorial([]);
   }
 
   return (
@@ -317,6 +369,8 @@ export default function App() {
             setMateria={setMateria}
             departamento={departamento}
             setDepartamento={setDepartamento}
+            componente={componente}
+            setComponente={setComponente}
             opciones={opciones}
             semestres={semestres}
             semestresOpen={semestresOpen}
@@ -341,6 +395,7 @@ export default function App() {
             darkMode={darkMode}
             exportarExcel={handleExportarExcel}
             exportarReporte={handleExportarPDF}
+            enviarAlEquipo={enviarPDFAlEquipo}
             reporteRef={reporteRef}
             resultados={resultados}
             profesor={profesor}
@@ -362,6 +417,16 @@ export default function App() {
           cardClass={cardClass}
           darkMode={darkMode}
           resultados={resultados}
+          />
+        )}
+
+        {activePage === PAGE_KEYS.HISTORIAL && (
+          <HistorialPage
+            historial={historial}
+            limpiarHistorial={limpiarHistorial}
+            cargarBusqueda={cargarBusqueda}
+            darkMode={darkMode}
+            cardClass={cardClass}
           />
         )}
       </main>
