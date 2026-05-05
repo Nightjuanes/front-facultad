@@ -1,6 +1,6 @@
 import { Users, Clock, BookOpen, CalendarDays } from "lucide-react";
 
-export function buildStats(resultados, periodoTexto) {
+export function buildStats(resultados, periodoTexto, profesorBusqueda) {
   const totalHoras = resultados.reduce(
     (acc, r) =>
       acc +
@@ -26,10 +26,19 @@ export function buildStats(resultados, periodoTexto) {
       .filter(Boolean)
   );
 
+  let nombreMostrado = "—";
+  if (profesorBusqueda) {
+    nombreMostrado = profesorBusqueda;
+  } else if (profesoresSet.size === 1) {
+    nombreMostrado = Array.from(profesoresSet)[0];
+  } else if (profesoresSet.size > 1) {
+    nombreMostrado = `${profesoresSet.size} Profesores`;
+  }
+
   return [
     {
       title: "Profesores",
-      value: profesoresSet.size || "—",
+      value: nombreMostrado,
       icon: Users,
     },
     {

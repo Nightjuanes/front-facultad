@@ -43,22 +43,6 @@ export default function Sidebar({ activePage, setActivePage, darkMode }) {
 
       <nav className="space-y-2">
         <MenuItem
-          icon={AlertTriangle}
-          text="Calidad de datos"
-          active={activePage === PAGE_KEYS.CALIDAD}
-          onClick={() => setActivePage(PAGE_KEYS.CALIDAD)}
-          darkMode={darkMode}
-        />
-
-        <MenuItem
-          icon={Upload}
-          text="Actualizar base"
-          active={activePage === PAGE_KEYS.CARGA}
-          onClick={() => setActivePage(PAGE_KEYS.CARGA)}
-          darkMode={darkMode}
-        />
-
-        <MenuItem
           icon={LayoutDashboard}
           text="Dashboard"
           active={activePage === PAGE_KEYS.DASHBOARD}
@@ -68,17 +52,33 @@ export default function Sidebar({ activePage, setActivePage, darkMode }) {
 
         <MenuItem
           icon={FileText}
-          text="Reportes"
+          text="Reporte"
           active={activePage === PAGE_KEYS.REPORTES}
           onClick={() => setActivePage(PAGE_KEYS.REPORTES)}
           darkMode={darkMode}
         />
 
         <MenuItem
+          icon={AlertTriangle}
+          text="Calidad de datos"
+          active={activePage === PAGE_KEYS.CALIDAD}
+          onClick={() => setActivePage(PAGE_KEYS.CALIDAD)}
+          darkMode={darkMode}
+        />
+
+        <MenuItem
           icon={History}
-          text="Historial de búsquedas"
+          text="Historial de Búsuqeda"
           active={activePage === PAGE_KEYS.HISTORIAL}
           onClick={() => setActivePage(PAGE_KEYS.HISTORIAL)}
+          darkMode={darkMode}
+        />
+
+        <MenuItem
+          icon={Upload}
+          text="Actualizar Base"
+          active={activePage === PAGE_KEYS.CARGA}
+          onClick={() => setActivePage(PAGE_KEYS.CARGA)}
           darkMode={darkMode}
         />
       </nav>
