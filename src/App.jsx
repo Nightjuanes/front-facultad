@@ -96,8 +96,8 @@ export default function App() {
   }, [todoHistorial, semestresSeleccionados]);
 
   const stats = useMemo(() => {
-    return buildStats(resultados, periodoTexto);
-  }, [resultados, periodoTexto]);
+    return buildStats(resultados, periodoTexto, profesor);
+  }, [resultados, periodoTexto, profesor]);
 
   useEffect(() => {
     async function cargarInicial() {
