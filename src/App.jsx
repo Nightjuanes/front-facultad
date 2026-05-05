@@ -62,11 +62,10 @@ export default function App() {
   const [loadingInicial, setLoadingInicial] = useState(true);
   const [error, setError] = useState("");
 
-  const inputClass = `mt-1 w-full h-14 border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 ${
-    darkMode
+  const inputClass = `mt-1 w-full h-14 border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 ${darkMode
       ? "bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
       : "bg-white border-slate-300 text-slate-900"
-  }`;
+    }`;
 
   const cardClass = darkMode
     ? "bg-slate-900 border-slate-700 text-white"
@@ -117,7 +116,7 @@ export default function App() {
       } catch (err) {
         setError(
           err.message ||
-            "No se pudo conectar con el backend. Revisa que esté corriendo."
+          "No se pudo conectar con el backend. Revisa que esté corriendo."
         );
       } finally {
         setLoadingInicial(false);
@@ -181,55 +180,55 @@ export default function App() {
   }
 
   async function buscar() {
-  if (!profesor && !todoHistorial && semestresSeleccionados.length === 0) {
-    setError("VALIDACION");
-    return;
-  }
-
-  try {
-    setLoading(true);
-    setError("");
-
-    const data = await getConsolidado({
-      profesor,
-      semestres: todoHistorial ? "" : semestresSeleccionados.join(","),
-    });
-
-    if (data?.ok === false) {
-      setError("BACKEND");
+    if (!profesor && !todoHistorial && semestresSeleccionados.length === 0) {
+      setError("VALIDACION");
       return;
     }
 
-    const nuevosResultados = filtrarLocal(normalizeArray(data));
-    setResultados(nuevosResultados);
+    try {
+      setLoading(true);
+      setError("");
 
-    // Guardar en historial
-    const nuevaBusqueda = {
-      profesor,
-      semestresSeleccionados,
-      todoHistorial,
-      materia,
-      departamento,
-      timestamp: new Date().getTime(),
-    };
+      const data = await getConsolidado({
+        profesor,
+        semestres: todoHistorial ? "" : semestresSeleccionados.join(","),
+      });
 
-    setHistorial((prev) => {
-      const filtered = prev.filter(
-        (h) =>
-          h.profesor !== profesor ||
-          JSON.stringify(h.semestresSeleccionados) !==
+      if (data?.ok === false) {
+        setError("BACKEND");
+        return;
+      }
+
+      const nuevosResultados = filtrarLocal(normalizeArray(data));
+      setResultados(nuevosResultados);
+
+      // Guardar en historial
+      const nuevaBusqueda = {
+        profesor,
+        semestresSeleccionados,
+        todoHistorial,
+        materia,
+        departamento,
+        timestamp: new Date().getTime(),
+      };
+
+      setHistorial((prev) => {
+        const filtered = prev.filter(
+          (h) =>
+            h.profesor !== profesor ||
+            JSON.stringify(h.semestresSeleccionados) !==
             JSON.stringify(semestresSeleccionados)
-      );
-      return [...filtered, nuevaBusqueda].slice(-20);
-    });
+        );
+        return [...filtered, nuevaBusqueda].slice(-20);
+      });
 
-    setActivePage(PAGE_KEYS.DASHBOARD);
-  } catch (err) {
-    setError("GENERAL");
-  } finally {
-    setLoading(false);
+      setActivePage(PAGE_KEYS.DASHBOARD);
+    } catch (err) {
+      setError("GENERAL");
+    } finally {
+      setLoading(false);
+    }
   }
-}
 
   function limpiarFiltros() {
     setProfesor("");
@@ -247,24 +246,24 @@ export default function App() {
   }
 
   async function subirArchivo() {
-  if (!archivo) {
-    setMensajeCarga("Selecciona un archivo Excel primero.");
-    return;
+    if (!archivo) {
+      setMensajeCarga("Selecciona un archivo Excel primero.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setMensajeCarga("");
+
+      await cargarExcel(archivo);
+
+      setMensajeCarga("Archivo cargado y base histórica actualizada correctamente.");
+    } catch (err) {
+      setMensajeCarga(err.message || "Error cargando el archivo.");
+    } finally {
+      setLoading(false);
+    }
   }
-
-  try {
-    setLoading(true);
-    setMensajeCarga("");
-
-    await cargarExcel(archivo);
-
-    setMensajeCarga("Archivo cargado y base histórica actualizada correctamente.");
-  } catch (err) {
-    setMensajeCarga(err.message || "Error cargando el archivo.");
-  } finally {
-    setLoading(false);
-  }
-}
 
   function handleExportarExcel() {
     exportarExcel(resultados, profesor);
@@ -293,9 +292,8 @@ export default function App() {
 
   return (
     <div
-      className={`flex min-h-screen ${
-        darkMode ? "bg-slate-950" : "bg-[#F3F7FB]"
-      }`}
+      className={`flex min-h-screen ${darkMode ? "bg-slate-950" : "bg-[#F3F7FB]"
+        }`}
     >
       <Sidebar
         activePage={activePage}
@@ -305,47 +303,47 @@ export default function App() {
 
       <main className="flex-1 p-8">
         <Header
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-        resultados={resultados}
-        exportarReporte={handleExportarPDF}
-        activePage={activePage}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          resultados={resultados}
+          exportarReporte={handleExportarPDF}
+          activePage={activePage}
         />
 
         {error && (
-  <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-amber-800 flex items-start gap-3">
-    <AlertTriangle size={22} className="mt-0.5" />
+          <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-amber-800 flex items-start gap-3">
+            <AlertTriangle size={22} className="mt-0.5" />
 
-    <div>
-      {error === "VALIDACION" && (
-        <>
-          <p className="font-bold">Faltan filtros</p>
-          <p className="text-sm mt-1">
-            Debes seleccionar un profesor o al menos un semestre.
-          </p>
-        </>
-      )}
+            <div>
+              {error === "VALIDACION" && (
+                <>
+                  <p className="font-bold">Faltan filtros</p>
+                  <p className="text-sm mt-1">
+                    Debes seleccionar un profesor o al menos un semestre.
+                  </p>
+                </>
+              )}
 
-      {error === "BACKEND" && (
-        <>
-          <p className="font-bold">Error en la consulta</p>
-          <p className="text-sm mt-1">
-            El servidor no pudo procesar la solicitud correctamente.
-          </p>
-        </>
-      )}
+              {error === "BACKEND" && (
+                <>
+                  <p className="font-bold">Error en la consulta</p>
+                  <p className="text-sm mt-1">
+                    El servidor no pudo procesar la solicitud correctamente.
+                  </p>
+                </>
+              )}
 
-      {error === "GENERAL" && (
-        <>
-          <p className="font-bold">Error inesperado</p>
-          <p className="text-sm mt-1">
-            Ocurrió un problema al consultar la información.
-          </p>
-        </>
-      )}
-    </div>
-  </div>
-)}
+              {error === "GENERAL" && (
+                <>
+                  <p className="font-bold">Error inesperado</p>
+                  <p className="text-sm mt-1">
+                    Ocurrió un problema al consultar la información.
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+        )}
 
         <StatsGrid stats={stats} darkMode={darkMode} />
 
@@ -407,9 +405,9 @@ export default function App() {
 
         {activePage === PAGE_KEYS.CALIDAD && (
           <CalidadPage
-          cardClass={cardClass}
-          darkMode={darkMode}
-          resultados={resultados}
+            cardClass={cardClass}
+            darkMode={darkMode}
+            resultados={resultados}
           />
         )}
 
