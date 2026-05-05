@@ -51,7 +51,7 @@ export default function DashboardPage({
                 darkMode ? "text-sm text-slate-400" : "text-sm text-slate-500"
               }
             >
-              Combina profesor, materia, semestre, componente y departamento.
+              Combina profesor, materia, semestre y departamento.
             </p>
           </div>
 
@@ -88,11 +88,10 @@ export default function DashboardPage({
 
             {mostrarSugerencias && profesoresFiltrados.length > 0 && (
               <div
-                className={`absolute z-40 mt-2 w-full max-h-72 overflow-y-auto rounded-xl border shadow-lg ${
-                  darkMode
-                    ? "bg-slate-900 border-slate-700"
-                    : "bg-white border-blue-100"
-                }`}
+                className={`absolute z-40 mt-2 w-full max-h-72 overflow-y-auto rounded-xl border shadow-lg ${darkMode
+                  ? "bg-slate-900 border-slate-700"
+                  : "bg-white border-blue-100"
+                  }`}
               >
                 {profesoresFiltrados.map((nombre) => (
                   <button
@@ -108,11 +107,10 @@ export default function DashboardPage({
                         actualizarOpciones(nombre);
                       }, 100);
                     }}
-                    className={`w-full text-left px-4 py-3 border-b ${
-                      darkMode
-                        ? "text-slate-200 border-slate-700 hover:bg-slate-800"
-                        : "text-slate-700 border-slate-100 hover:bg-blue-50"
-                    }`}
+                    className={`w-full text-left px-4 py-3 border-b ${darkMode
+                      ? "text-slate-200 border-slate-700 hover:bg-slate-800"
+                      : "text-slate-700 border-slate-100 hover:bg-blue-50"
+                      }`}
                   >
                     {nombre}
                   </button>
@@ -154,28 +152,26 @@ export default function DashboardPage({
               {todoHistorial
                 ? "Todo el historial del profesor"
                 : semestresSeleccionados.length > 0
-                ? `${semestresSeleccionados.length} semestre(s) seleccionado(s)`
-                : "Seleccionar semestres"}
+                  ? `${semestresSeleccionados.length} semestre(s) seleccionado(s)`
+                  : "Seleccionar semestres"}
             </span>
             <ChevronDown size={18} />
           </button>
 
           {semestresOpen && (
             <div
-              className={`absolute z-20 mt-2 w-full border rounded-2xl shadow-lg p-4 ${
-                darkMode
-                  ? "bg-slate-900 border-slate-700"
-                  : "bg-white border-blue-100"
-              }`}
+              className={`absolute z-20 mt-2 w-full border rounded-2xl shadow-lg p-4 ${darkMode
+                ? "bg-slate-900 border-slate-700"
+                : "bg-white border-blue-100"
+                }`}
             >
               <label
-                className={`flex items-center gap-3 px-3 py-3 rounded-xl cursor-pointer border mb-3 ${
-                  todoHistorial
-                    ? "bg-[#003B70] text-white border-[#003B70]"
-                    : darkMode
+                className={`flex items-center gap-3 px-3 py-3 rounded-xl cursor-pointer border mb-3 ${todoHistorial
+                  ? "bg-[#003B70] text-white border-[#003B70]"
+                  : darkMode
                     ? "bg-slate-800 text-slate-200 border-slate-700"
                     : "bg-slate-50 text-slate-700 border-slate-200"
-                }`}
+                  }`}
               >
                 <input
                   type="checkbox"
@@ -196,13 +192,12 @@ export default function DashboardPage({
                   return (
                     <label
                       key={index}
-                      className={`flex items-center gap-2 text-sm px-3 py-2 rounded-lg cursor-pointer border ${
-                        semestresSeleccionados.includes(value)
-                          ? "bg-[#003B70] text-white border-[#003B70]"
-                          : darkMode
+                      className={`flex items-center gap-2 text-sm px-3 py-2 rounded-lg cursor-pointer border ${semestresSeleccionados.includes(value)
+                        ? "bg-[#003B70] text-white border-[#003B70]"
+                        : darkMode
                           ? "bg-slate-800 text-slate-200 border-slate-700"
                           : "bg-white text-slate-600 border-slate-200 hover:bg-blue-50"
-                      }`}
+                        }`}
                     >
                       <input
                         type="checkbox"
@@ -251,7 +246,7 @@ export default function DashboardPage({
                 darkMode ? "text-sm text-slate-400" : "text-sm text-slate-500"
               }
             >
-              Tabla con los 7 campos exactos solicitados.
+              Tabla con los campos solicitados.
             </p>
           </div>
 
