@@ -16,8 +16,6 @@ export default function DashboardPage({
   setMateria,
   departamento,
   setDepartamento,
-  componente,
-  setComponente,
   opciones,
   semestres,
   semestresOpen,
@@ -66,7 +64,7 @@ export default function DashboardPage({
           </button>
         </div>
 
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           <div className="relative">
             <label className="text-xs font-semibold text-slate-500">
               Profesor
@@ -137,15 +135,6 @@ export default function DashboardPage({
             options={opciones.departamentos}
             selected={departamento}
             setSelected={setDepartamento}
-            placeholder="Todos"
-            darkMode={darkMode}
-          />
-
-          <MultiSelect
-            label="Componente"
-            options={opciones.componentes}
-            selected={componente}
-            setSelected={setComponente}
             placeholder="Todos"
             darkMode={darkMode}
           />

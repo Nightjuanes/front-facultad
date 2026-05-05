@@ -37,8 +37,8 @@ export default function App() {
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
 
   const [materia, setMateria] = useState([]);
-  const [componente, setComponente] = useState([]);
   const [departamento, setDepartamento] = useState([]);
+
 
   const [semestresSeleccionados, setSemestresSeleccionados] = useState([]);
   const [semestresOpen, setSemestresOpen] = useState(false);
@@ -173,12 +173,10 @@ export default function App() {
       const dep = r.departamento || r.descripcion_materia || "";
 
       const okMateria = materia.length === 0 || materia.includes(mat);
-      const okComponente =
-        componente.length === 0 || componente.includes(comp);
       const okDepartamento =
         departamento.length === 0 || departamento.includes(dep);
 
-      return okMateria && okComponente && okDepartamento;
+      return okMateria && okDepartamento;
     });
   }
 
@@ -212,7 +210,6 @@ export default function App() {
       todoHistorial,
       materia,
       departamento,
-      componente,
       timestamp: new Date().getTime(),
     };
 
@@ -238,7 +235,6 @@ export default function App() {
     setProfesor("");
     setMateria([]);
     setDepartamento([]);
-    setComponente([]);
     setSemestresSeleccionados([]);
     setTodoHistorial(true);
     setResultados([]);
@@ -284,7 +280,6 @@ export default function App() {
     setTodoHistorial(item.todoHistorial);
     setMateria(item.materia || []);
     setDepartamento(item.departamento || []);
-    setComponente(item.componente || []);
 
     setTimeout(() => {
       actualizarOpciones(item.profesor);
@@ -369,8 +364,6 @@ export default function App() {
             setMateria={setMateria}
             departamento={departamento}
             setDepartamento={setDepartamento}
-            componente={componente}
-            setComponente={setComponente}
             opciones={opciones}
             semestres={semestres}
             semestresOpen={semestresOpen}

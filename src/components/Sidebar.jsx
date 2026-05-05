@@ -29,7 +29,7 @@ export default function Sidebar({ activePage, setActivePage, darkMode }) {
               darkMode ? "text-white" : "text-[#002B5B]"
             }`}
           >
-            CertiDoc
+            CertiFI
           </h1>
           <p
             className={
